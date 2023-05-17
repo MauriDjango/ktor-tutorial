@@ -11,6 +11,8 @@
     <hr>
     <#nested>
     <a href="/">Back to the main page</a>
+    <a href="/articles">Articles</a>
+    <a href="/subjects">Subjects</a>
     </body>
     </html>
 </#macro>

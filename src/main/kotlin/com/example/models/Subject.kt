@@ -1,6 +1,5 @@
 package com.example.models
 
-import com.example.models.Articles.autoIncrement
 import org.jetbrains.exposed.sql.Table
 
 data class Subject(
