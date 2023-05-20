@@ -7,16 +7,16 @@ data class Subject(
     val value: String,
     val name: String,
     val description: String,
-    val sectionId: String,
-    val order: Int
+    val sectionId: Int,
+    val order: Int,
     )
 
 object Subjects: Table() {
     val id = varchar("id", 32)
     val value = varchar("value", 1024)
     val name = varchar("name", 128)
-    val description = varchar("ddescription", 256)
-    val sectionId = varchar("sectionId", 32)
+    val description = varchar("description", 256)
+    val sectionId = reference("sectionId", Articles.id)
     val order = integer("order")
 
     override val primaryKey = PrimaryKey(id)

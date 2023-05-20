@@ -13,8 +13,11 @@ fun Application.configureTemplating() {
         outputFormat = HTMLOutputFormat.INSTANCE
     }
     routing {
-        get("/html-freemarker") {
-            call.respond(FreeMarkerContent("index_articles.ftl", mapOf("data" to IndexData(listOf(1, 2, 3))), ""))
+        get("/html-freemarker/articles") {
+            call.respond(FreeMarkerContent("index_article.ftl", mapOf("data" to IndexData(listOf(1, 2, 3))), ""))
+        }
+        get("/html-freemarker/subjects") {
+            call.respond(FreeMarkerContent("index_subject.ftl", mapOf("data" to IndexData(listOf(1, 2, 3))), ""))
         }
     }
 }

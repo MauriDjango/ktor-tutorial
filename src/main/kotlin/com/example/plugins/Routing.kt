@@ -1,7 +1,9 @@
 package com.example.plugins
 
-import com.example.dao.dao
+import com.example.dao.daoArticle
+import com.example.dao.daoSubject
 import com.example.models.Article
+import com.example.models.Subject
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.http.content.*
@@ -22,27 +24,31 @@ fun Application.configureRouting() {
         route("/articles") {
                 // Show a list of articles
             get {
-                call.respond(FreeMarkerContent("index_articles.ftl", mapOf("articles" to dao.allArticles())))
+                call.respond(FreeMarkerContent("/articles/index_article.ftl", mapOf("articles" to daoArticle.all())))
             }
             get("new") {
                 // Show a page with fields for creating a new article
-                call.respond(FreeMarkerContent("new_article.ftl", model = null))
+                call.respond(FreeMarkerContent("/articles/new_article.ftl", model = null))
             }
             post {
                 val formParameters = call.receiveParameters()
+                val id = 0
                 val title = formParameters.getOrFail("title")
                 val body = formParameters.getOrFail("body")
-                val article = dao.addNewArticle(title, body)
+                val formArt = Article(id, title, body)
+                val article = daoArticle.add(formArt)
                 call.respondRedirect("/articles/${article?.id}")
                 // Save an article
             }
             get("{id}") {
                 val id = call.parameters.getOrFail<Int>("id").toInt()
-                call.respond(FreeMarkerContent("show_articles.ftl", mapOf("article" to dao.article(id))))
+                val tempArt = Article(id, "Null", "Null")
+                call.respond(FreeMarkerContent("/articles/show_article.ftl", mapOf("article" to daoArticle.findById(tempArt))))
             }
             get("{id}/edit") {
                 val id = call.parameters.getOrFail<Int>("id").toInt()
-                call.respond(FreeMarkerContent("edit_articles.ftl", mapOf("article" to dao.article(id))))
+                val tempArt = Article(id, "Null", "Null")
+                call.respond(FreeMarkerContent("/articles/edit_article.ftl", mapOf("article" to daoArticle.findById(tempArt))))
             }
             post("{id}") {
                 val id = call.parameters.getOrFail<Int>("id").toInt()
@@ -51,12 +57,13 @@ fun Application.configureRouting() {
                     "update" -> {
                         val title = formParameters.getOrFail("title")
                         val body = formParameters.getOrFail("body")
-                        dao.editArticle(id, title, body)
+                        val formArt = Article(id, title, body)
+                        daoArticle.edit(formArt)
                         call.respondRedirect("/articles/$id")
                     }
-
                     "delete" -> {
-                        dao.deleteArticle(id)
+                        val tempArt = Article(id, "Null", "Null")
+                        daoArticle.delete(tempArt)
                         call.respondRedirect("/articles")
                     }
                 }
@@ -65,42 +72,54 @@ fun Application.configureRouting() {
         route("/subjects") {
             // Show a list of articles
             get {
-                call.respond(FreeMarkerContent("index_subjects.ftl", mapOf("subject" to dao.allArticles())))
+                call.respond(FreeMarkerContent("/subjects/index_subject.ftl", mapOf("subjects" to daoSubject.all())))
             }
             get("new") {
                 // Show a page with fields for creating a new article
-                call.respond(FreeMarkerContent("new_article.ftl", model = null))
+                call.respond(FreeMarkerContent("/subjects/new_subject.ftl", model = null))
             }
             post {
                 val formParameters = call.receiveParameters()
-                val title = formParameters.getOrFail("title")
-                val body = formParameters.getOrFail("body")
-                val article = dao.addNewArticle(title, body)
-                call.respondRedirect("/articles/${article?.id}")
+                val id = formParameters.getOrFail("id")
+                val value = formParameters.getOrFail("value")
+                val name = formParameters.getOrFail("name")
+                val description = formParameters.getOrFail("description")
+                val sectionId = formParameters.getOrFail("sectionId")
+                val order = formParameters.getOrFail("order")
+                val subject = Subject(id, value, name, description, sectionId, order.toInt())
+                val newSub = daoSubject.add(subject)
+                call.respondRedirect("/subjects/${newSub?.id}")
                 // Save an article
             }
             get("{id}") {
-                val id = call.parameters.getOrFail<Int>("id").toInt()
-                call.respond(FreeMarkerContent("show_articles.ftl", mapOf("article" to dao.article(id))))
+                val id = call.parameters.getOrFail<String>("id")
+                val tempSub = Subject(id, "null", "null", "null", "null", 0)
+                call.respond(FreeMarkerContent("/subjects/show_subject.ftl", mapOf("subject" to daoSubject.findById(tempSub))))
             }
             get("{id}/edit") {
-                val id = call.parameters.getOrFail<Int>("id").toInt()
-                call.respond(FreeMarkerContent("edit_articles.ftl", mapOf("article" to dao.article(id))))
+                val id = call.parameters.getOrFail<String>("id")
+                val tempSub = Subject(id, "null", "null", "null", "null", 0)
+                call.respond(FreeMarkerContent("/subjects/edit_subject.ftl", mapOf("subject" to daoSubject.findById(tempSub))))
             }
             post("{id}") {
-                val id = call.parameters.getOrFail<Int>("id").toInt()
+                val id = call.parameters.getOrFail<String>("id")
                 val formParameters = call.receiveParameters()
                 when (formParameters.getOrFail("_action")) {
                     "update" -> {
-                        val title = formParameters.getOrFail("title")
-                        val body = formParameters.getOrFail("body")
-                        dao.editArticle(id, title, body)
-                        call.respondRedirect("/articles/$id")
+                        val value = formParameters.getOrFail("value")
+                        val name = formParameters.getOrFail("name")
+                        val description = formParameters.getOrFail("description")
+                        val sectionId = formParameters.getOrFail("sectionId")
+                        val order = formParameters.getOrFail("order")
+                        val subject = Subject(id, value, name, description, sectionId, order.toInt())
+                        daoSubject.edit(subject)
+                        call.respondRedirect("/subjects/$id")
                     }
 
                     "delete" -> {
-                        dao.deleteArticle(id)
-                        call.respondRedirect("/articles")
+                        val tempSub = Subject(id, "null", "null", "null", "null", 0)
+                        daoSubject.delete(tempSub)
+                        call.respondRedirect("/subjects")
                     }
                 }
             }

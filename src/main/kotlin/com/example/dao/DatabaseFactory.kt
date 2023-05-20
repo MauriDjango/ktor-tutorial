@@ -12,7 +12,7 @@ object DatabaseFactory {
         val jdbcURL = "jdbc:h2:file:./db"
         val database = Database.connect(jdbcURL, driverClassName)
         transaction(database) {
-            SchemaUtils.create(Articles)
+            SchemaUtils.create(Articles, Subjects)
         }
     }
 
