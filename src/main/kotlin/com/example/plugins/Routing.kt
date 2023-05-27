@@ -43,7 +43,8 @@ fun Application.configureRouting() {
             get("{id}") {
                 val id = call.parameters.getOrFail<Int>("id").toInt()
                 val tempArt = Article(id, "Null", "Null")
-                call.respond(FreeMarkerContent("/articles/show_article.ftl", mapOf("article" to daoArticle.findById(tempArt))))
+                call.respond(FreeMarkerContent("/articles/show_article.ftl", mapOf("articles" to mapOf(daoArticle.findById(tempArt) to mapOf("subject" to daoSubject.getByArticle(id)))
+                //TODO variable being passed need to be all passed in same argument, current attempt is map inside of a map
             }
             get("{id}/edit") {
                 val id = call.parameters.getOrFail<Int>("id").toInt()

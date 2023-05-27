@@ -20,4 +20,5 @@ object Subjects: Table() {
     val order = integer("order")
 
     override val primaryKey = PrimaryKey(id)
+    //TODO fix issues with reference
 }

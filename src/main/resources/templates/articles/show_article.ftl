@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="article" type="com.example.models.Article" -->
+<#-- @ftlvariable name="subjects" type="kotlin.collections.List<com.example.models.Subject>" -->
 
 <#import "../_layout.ftl" as layout />
 <@layout.header>
@@ -10,13 +11,13 @@
             ${article.body}
         </p>
         <p>
-            <#list articles?reverse as article>
+            <#list subjects?reverse as subject>
                 <div>
                     <h3>
-                        <a href="/articles/${article.id}">${article.title}</a>
+                        <a href="/articles/${subject.id}">${subject.name}</a>
                     </h3>
                     <p>
-                        ${article.body}
+                        ${subject.description}
                     </p>
                 </div>
             </#list>
