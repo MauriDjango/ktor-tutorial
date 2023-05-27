@@ -1,0 +1,34 @@
+.article-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.article {
+    margin-bottom: 10px;
+}
+
+.article-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.article-body {
+    margin-bottom: 10px;
+}
+
+.subjects {
+    margin-bottom: 10px;
+}
+
+.subject-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.subject-description {
+    margin-bottom: 10px;
+}

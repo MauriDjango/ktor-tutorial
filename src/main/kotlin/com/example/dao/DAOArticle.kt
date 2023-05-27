@@ -2,7 +2,6 @@ package com.example.dao
 
 import com.example.dao.DatabaseFactory.dbQuery
 import com.example.models.*
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -46,16 +45,4 @@ class DAOArticle : DAOFacade<Article> {
 }
 
 
-val daoArticle: DAOArticle = DAOArticle().apply {
-    runBlocking {
-        if(all().isEmpty()) {
-            add(
-                Article(
-                    id = 1,
-                    title = "The drive to develop!",
-                    body = "...it's what keeps me going."
-                )
-            )
-        }
-    }
-}
+

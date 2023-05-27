@@ -6,19 +6,19 @@
         <h3>Edit subject</h3>
         <form action="/subjects/${subject.id}" method="post">
             <p>
-                <input type="text" name="value">
+                <input type="text" name="value" value="${subject.value}">
             </p>
             <p>
-                <input type="text" name="name">
+                <input type="text" name="name" value="${subject.name}">
             </p>
             <p>
-                <textarea type="text" name="description"></textarea>
+                <textarea type="text" name="description" value="${subject.description}"></textarea>
             </p>
             <p>
-                <textarea name="sectionId"></textarea>
+                <input name="sectionId" value="${subject.sectionId}">
             </p>
             <p>
-                <input type="text" name="order">
+                <input type="text" name="order" value="${subject.order}">
             </p>
             <p>
                 <input type="submit" name="_action" value="update">

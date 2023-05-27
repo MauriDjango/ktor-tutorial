@@ -1,9 +1,10 @@
 package com.example.plugins
 
-import com.example.dao.daoArticle
-import com.example.dao.daoSubject
+
 import com.example.models.Article
 import com.example.models.Subject
+import daoArticle
+import daoSubject
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.http.content.*
@@ -43,7 +44,12 @@ fun Application.configureRouting() {
             get("{id}") {
                 val id = call.parameters.getOrFail<Int>("id").toInt()
                 val tempArt = Article(id, "Null", "Null")
-                call.respond(FreeMarkerContent("/articles/show_article.ftl", mapOf("articles" to mapOf(daoArticle.findById(tempArt) to mapOf("subject" to daoSubject.getByArticle(id)))
+                call.respond(
+                    FreeMarkerContent(
+                        "/articles/show_article.ftl",
+                        mapOf( "article" to daoArticle.findById(tempArt), "subjects" to daoSubject.getByArticle(id))
+                    )
+                )
                 //TODO variable being passed need to be all passed in same argument, current attempt is map inside of a map
             }
             get("{id}/edit") {
@@ -70,6 +76,7 @@ fun Application.configureRouting() {
                 }
             }
         }
+
         route("/subjects") {
             // Show a list of articles
             get {
@@ -87,19 +94,19 @@ fun Application.configureRouting() {
                 val description = formParameters.getOrFail("description")
                 val sectionId = formParameters.getOrFail("sectionId")
                 val order = formParameters.getOrFail("order")
-                val subject = Subject(id, value, name, description, sectionId, order.toInt())
+                val subject = Subject(id, value, name, description, sectionId.toInt(), order.toInt())
                 val newSub = daoSubject.add(subject)
                 call.respondRedirect("/subjects/${newSub?.id}")
                 // Save an article
             }
             get("{id}") {
                 val id = call.parameters.getOrFail<String>("id")
-                val tempSub = Subject(id, "null", "null", "null", "null", 0)
+                val tempSub = Subject(id, "null", "null", "null", 0, 0)
                 call.respond(FreeMarkerContent("/subjects/show_subject.ftl", mapOf("subject" to daoSubject.findById(tempSub))))
             }
             get("{id}/edit") {
                 val id = call.parameters.getOrFail<String>("id")
-                val tempSub = Subject(id, "null", "null", "null", "null", 0)
+                val tempSub = Subject(id, "null", "null", "null", 0, 0)
                 call.respond(FreeMarkerContent("/subjects/edit_subject.ftl", mapOf("subject" to daoSubject.findById(tempSub))))
             }
             post("{id}") {
@@ -112,13 +119,13 @@ fun Application.configureRouting() {
                         val description = formParameters.getOrFail("description")
                         val sectionId = formParameters.getOrFail("sectionId")
                         val order = formParameters.getOrFail("order")
-                        val subject = Subject(id, value, name, description, sectionId, order.toInt())
+                        val subject = Subject(id, value, name, description, sectionId.toInt(), order.toInt())
                         daoSubject.edit(subject)
                         call.respondRedirect("/subjects/$id")
                     }
 
                     "delete" -> {
-                        val tempSub = Subject(id, "null", "null", "null", "null", 0)
+                        val tempSub = Subject(id, "null", "null", "null", 0, 0)
                         daoSubject.delete(tempSub)
                         call.respondRedirect("/subjects")
                     }

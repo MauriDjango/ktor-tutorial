@@ -3,28 +3,35 @@
 
 <#import "../_layout.ftl" as layout />
 <@layout.header>
-    <div>
-        <h3>
-            ${article.title}
-        </h3>
-        <p>
-            ${article.body}
-        </p>
-        <p>
-            <#list subjects?reverse as subject>
-                <div>
-                    <h3>
-                        <a href="/articles/${subject.id}">${subject.name}</a>
-                    </h3>
-                    <p>
-                        ${subject.description}
-                    </p>
-                </div>
-            </#list>
-        </p>
-        <hr>
-        <p>
-            <a href="/articles/${article.id}/edit">Edit article</a>
-        </p>
+    <div class="article-container">
+        <div class="article">
+            <h3 class="article-title">
+                <a href="/articles/${article.id}">${article.title}</a>
+            </h3>
+            <p class="article-body">
+                ${article.body}
+            </p>
+        </div>
+        <div class="subjects">
+            <h4>Subjects:</h4>
+            <ul>
+                <#list subjects as subject>
+                    <li>
+                        <h5 class="subject-name">
+                            <a href="/subjects/${subject.id}">${subject.name}</a>
+                        </h5>
+                        <p class="subject-description">
+                            ${subject.description}
+                        </p>
+                    </li>
+                </#list>
+            </ul>
+        </div>
     </div>
+    <hr>
+    <p>
+        <a href="/articles/${article.id}/edit">Edit article</a>
+    </p>
 </@layout.header>
+
+<link rel="stylesheet" href="../../css/show_article.css">

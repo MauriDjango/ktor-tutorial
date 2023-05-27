@@ -16,9 +16,8 @@ object Subjects: Table() {
     val value = varchar("value", 1024)
     val name = varchar("name", 128)
     val description = varchar("description", 256)
-    val sectionId = reference("sectionId", Articles.id)
     val order = integer("order")
+    val sectionId = reference("sectionId", Articles.id)
 
     override val primaryKey = PrimaryKey(id)
-    //TODO fix issues with reference
 }
